@@ -1,3 +1,9 @@
+const http = require('http'); 
+
+
+const server = http.createServer(function(req,res){
+
+
 //단순 " 문자열"을 리턴하는 elementMaker 함수
 //HTML 형식을 따랏을 뿐 HTML fh parsing 되기 전까지는 단순한 문자열이다.
 function elementMaker(tagName, content){
@@ -26,3 +32,9 @@ for(let i = 0; i<10; i++){
 //join()메서드는 배열의 모든 원소를 연결해 하나의 문자열로 
 //만들어 간단하게 <h1>KDT-${n}<h1>을 생성한 것을 확인 할 수 있다.
 render(elementsData.join(''));
+
+res.writeHead(200);
+res.end(render(elementsData.join('')));
+});
+
+server.listen(3000);
