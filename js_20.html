@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    const createtabmenu = (tabName, tabContents) => {
+      const tabMenuContainer = document.getElementById("root");
+      const tabMenu = document.createElement("ul");
+      tabMenu.style.listStyleType = "none";
+      tabMenu.style.padding = 0;
+    
+    const tabButtons = tabName.map((name, i)=>{
+      const tabButton = document.createElement("li");
+      tabButton.textContent = name;
+      //매개변수 name을 탭 버튼의 텍스트로 설정
+      //탭 버튼의 스타일링
+      tabButton.style.display = "block";
+      tabButton.style.padding = "10px";
+      tabButton.style.border = "1px solid #ccc";
+      //탭버튼 모든 요소에 click 이벤트 추가
+      tabButton.addEventListener("click",(event)=> {
+        const index = tabButtons.indexOf(event.target);
+        //css 의 속성 선택자 활용한 예제 attribute selector라고도 부르며,
+        //이것을 dom apo 객체에서는 dataset 이라는 속성으로 엑세스 할 수 있다.
+        const tabContentContainer = tabMenuContainer.querySelector("[data-tab-content-container]");
+        
+        if(tabContentContainer){
+          const tabContentsElements = tabContentContainer.childNodes;
+          //아래의 forEach() 두번째 매개변수 j는 index이다. 상위 반복문에서 i를 사용하기 때문에 구분하였다.
+          tabContentsElements.forEach(element, j => {
+            element.style.dispalay = j === index ? "block" : "none"; 
+          });
+        }
+        //복잡해보이지만 단순 스타일링 삼항 연산자로 처리
+        tabButtons.forEach((button,j)=>{
+          button.style.backgroundColor = j === index ? "#ccc" : "#fff";
+          button.style.color = j === index ? "#fff" :"#000";
+        });
+      });
+      tabMenu.appendChild(tabButton);
+      return tabButton;
+      //tabButton, 상수 tabButtons는 함수가 호출될 때 배열을 반환한다. 
+    });
+    //탭 버튼의 첫번째 요소에 고정적으로 스타일링
+    tabButtons[0].style.backgroundColor = "#ccc";
+    tabButtons[0].style.color ="#fff";
+  }
+  const tabContentContainer =document.createElement("div");
+  tabContentContainer.setAttribute("data-tab-content-container","");
+  //.map()메서드의 사용성이 매우 높은 것을 확인 할 수 있다.
+  const tabContentElements = tabContents.map((content,i)=>{
+    const tabContentElement = document.createElement("div");
+    tabContentElement.appendChild(content);
+    if(i !==0){
+      tabContentElement.style.dispalay="none";
+    } 
+    return tabContentElement;
+  });
+  //prev는 이전에 반환된 값이고, curr(current)은 현재 배열 요소이다.
+  tabContentElements.reduce((prev,curr)=>{
+    prev.oppendChild(curr);
+    return prev;
+  }, tabContentContainer);
+  tabMenuContainer.appendChild(tabMenu);
+  tabMenuContainer.appendChild(tabContentContainer);
+
+
+
+  </script>
+</body>
+</html>
